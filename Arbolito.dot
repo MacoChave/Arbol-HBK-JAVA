@@ -2,17 +2,17 @@ digraph Arbolito {
 rankdir = TB
 node [shape = record]
 
-node5 [label = "<izq> | 5 | <der>"]
-node5 : izq -> node3
-node5 : der -> node8
+node7 [label = "<izq> | 7 | <der>"]
+node7 : izq -> node3
+node7 : der -> node9
 node3 [label = "<izq> | 3 | <der>"]
 node3 : izq -> node2
-node3 : der -> node4
+node3 : der -> node5
 node2 [label = "<izq> | 2 | <der>"]
-node2 : izq -> node1
-node1 [label = "<izq> | 1 | <der>"]
-node4 [label = "<izq> | 4 | <der>"]
-node8 [label = "<izq> | 8 | <der>"]
+node5 [label = "<izq> | 5 | <der>"]
+node9 [label = "<izq> | 9 | <der>"]
+node9 : der -> node10
+node10 [label = "<izq> | 10 | <der>"]
 
 
 }

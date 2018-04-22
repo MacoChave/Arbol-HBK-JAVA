@@ -32,45 +32,61 @@ public class AVLTree<T extends DataStructure> {
         if (root == null) {
             root = new AVLNode<>(data);
             getFactorBalance(root);
-            equilibrar(root);
+            root = balance(root);
         }
         else
-            add(data, root);
+            root = add(data, root);
     }
 
-    private void add(T data, AVLNode<T> current) {
+    private AVLNode<T> add(T data, AVLNode<T> current) {
         if (current.compareTo(data) > 0)
         {
             if (current.getLeftChild() == null)
                 current.setLeftChild(new AVLNode<>(data));
             else
-                add(data, current.getLeftChild());
+                current.setLeftChild(add(data, current.getLeftChild()));
         }
         else if (current.compareTo(data) < 0)
         {
             if ((current.getRightChild() == null))
                 current.setRightChild(new AVLNode<>(data));
             else
-                add(data, current.getRightChild());
+                current.setRightChild(add(data, current.getRightChild()));
         }
 
         getFactorBalance(current);
-        equilibrar(current);
+        current = balance(current);
+        return current;
     }
 
     public void edit(T data) {
+        AVLNode<T> node = get(data);
 
+        if (node != null)
+            node.setInfo(data);
     }
 
     public AVLNode<T> get(T data) {
-        return null;
+        if (root.compareTo(data) > 0)
+            return get(data, root.getLeftChild());
+        else if (root.compareTo(data) < 0)
+            return get(data, root.getRightChild());
+        else
+            return root;
     }
 
     @Nullable
     @Contract(pure = true)
     private AVLNode<T> get(T data, AVLNode<T> current) {
+        if (current == null)
+            return null;
 
-        return null;
+        if (current.compareTo(data) > 0)
+            return get(data, current.getLeftChild());
+        else if (current.compareTo(data) < 0)
+            return get(data, current.getRightChild());
+        else
+            return current;
     }
 
     public String graph() {
@@ -101,8 +117,23 @@ public class AVLTree<T extends DataStructure> {
         return text;
     }
 
-    private void equilibrar(AVLNode<T> current) {
+    private AVLNode<T> balance(AVLNode<T> current) {
+        if (current.getFactorBalance() > 1)
+        {
+            if (current.getRightChild().getFactorBalance() == 1)
+                current = rotate_SL(current);
+            else
+                current = rotate_DR(current);
+        }
+        else if (current.getFactorBalance() < -1)
+        {
+            if (current.getLeftChild().getFactorBalance() == 1)
+                current = rotate_DL(current);
+            else
+                current = rotate_SR(current);
+        }
 
+        return current;
     }
 
     private void getFactorBalance(AVLNode<T> current) {
@@ -118,20 +149,36 @@ public class AVLTree<T extends DataStructure> {
         current.setFactorBalance(hd - hi);
     }
 
-    private void rotate_DL(AVLNode<T> current) {
-
+    private AVLNode<T> rotate_DR(AVLNode<T> current) {
+        current.setRightChild(rotate_SR(current.getRightChild()));
+        getFactorBalance(current);
+        return rotate_SL(current);
     }
 
-    private void rotate_DR(AVLNode<T> current) {
-
+    private AVLNode<T> rotate_DL(AVLNode<T> current) {
+        current.setLeftChild(rotate_SL(current.getLeftChild()));
+        getFactorBalance(current);
+        return rotate_SR(current);
     }
 
-    private void rotate_SL(AVLNode<T> current) {
+    private AVLNode<T> rotate_SR(AVLNode<T> current) {
+        AVLNode<T> node = current.getLeftChild();
+        current.setLeftChild(node.getRightChild());
+        node.setRightChild(current);
 
+        getFactorBalance(current);
+        getFactorBalance(node);
+        return node;
     }
 
-    private void rotate_SR(AVLNode<T> current) {
+    private AVLNode<T> rotate_SL(AVLNode<T> current) {
+        AVLNode<T> node = current.getRightChild();
+        current.setRightChild(node.getLeftChild());
+        node.setLeftChild(current);
 
+        getFactorBalance(current);
+        getFactorBalance(node);
+        return node;
     }
 
     private void balanceOlder(AVLNode<T> current) {

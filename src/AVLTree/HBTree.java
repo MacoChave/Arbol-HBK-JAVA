@@ -5,32 +5,35 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import structure.DataStructure;
 
-public class AVLTree<T extends DataStructure> {
+public class HBTree<T extends DataStructure> {
 
-    private AVLNode<T> root;
+    private HBNode<T> root;
 
-    public AVLTree() {
+    private int k;
+
+    public HBTree(int k) {
+        this.k = k;
         root  = null;
     }
 
-    public AVLTree(AVLNode<T> root) {
-        this.root = root;
+    public HBNode<T> getRoot() {
+        return root;
     }
 
-    public AVLNode<T> getRoot() {
-        return root;
+    public int getK() {
+        return k;
     }
 
     @Override
     public String toString() {
-        return "AVLTree{" +
+        return "HBTree{" +
                 "root=" + root +
                 '}';
     }
 
     public void add(T data) {
         if (root == null) {
-            root = new AVLNode<>(data);
+            root = new HBNode<>(data);
             getFactorBalance(root);
             root = balance(root);
         }
@@ -38,18 +41,18 @@ public class AVLTree<T extends DataStructure> {
             root = add(data, root);
     }
 
-    private AVLNode<T> add(T data, AVLNode<T> current) {
+    private HBNode<T> add(T data, HBNode<T> current) {
         if (current.compareTo(data) > 0)
         {
             if (current.getLeftChild() == null)
-                current.setLeftChild(new AVLNode<>(data));
+                current.setLeftChild(new HBNode<>(data));
             else
                 current.setLeftChild(add(data, current.getLeftChild()));
         }
         else if (current.compareTo(data) < 0)
         {
             if ((current.getRightChild() == null))
-                current.setRightChild(new AVLNode<>(data));
+                current.setRightChild(new HBNode<>(data));
             else
                 current.setRightChild(add(data, current.getRightChild()));
         }
@@ -59,14 +62,14 @@ public class AVLTree<T extends DataStructure> {
         return current;
     }
 
-    public void edit(T data) {
-        AVLNode<T> node = get(data);
+    public void edit(T oldData, T newData) {
+        HBNode<T> node = get(oldData);
 
         if (node != null)
-            node.setInfo(data);
+            node.setInfo(newData);
     }
 
-    public AVLNode<T> get(T data) {
+    public HBNode<T> get(T data) {
         if (root.compareTo(data) > 0)
             return get(data, root.getLeftChild());
         else if (root.compareTo(data) < 0)
@@ -77,7 +80,7 @@ public class AVLTree<T extends DataStructure> {
 
     @Nullable
     @Contract(pure = true)
-    private AVLNode<T> get(T data, AVLNode<T> current) {
+    private HBNode<T> get(T data, HBNode<T> current) {
         if (current == null)
             return null;
 
@@ -96,7 +99,7 @@ public class AVLTree<T extends DataStructure> {
 
     @NotNull
     @Contract(pure = true)
-    private String graph(AVLNode<T> current) {
+    private String graph(HBNode<T> current) {
         String text = "";
 
         if (current == null) {
@@ -117,17 +120,17 @@ public class AVLTree<T extends DataStructure> {
         return text;
     }
 
-    private AVLNode<T> balance(AVLNode<T> current) {
-        if (current.getFactorBalance() > 1)
+    private HBNode<T> balance(HBNode<T> current) {
+        if (current.getFactorBalance() > k)
         {
-            if (current.getRightChild().getFactorBalance() == 1)
+            if (current.getRightChild().getFactorBalance() == k)
                 current = rotate_SL(current);
             else
                 current = rotate_DR(current);
         }
-        else if (current.getFactorBalance() < -1)
+        else if (current.getFactorBalance() < -k)
         {
-            if (current.getLeftChild().getFactorBalance() == 1)
+            if (current.getLeftChild().getFactorBalance() == k)
                 current = rotate_DL(current);
             else
                 current = rotate_SR(current);
@@ -136,7 +139,7 @@ public class AVLTree<T extends DataStructure> {
         return current;
     }
 
-    private void getFactorBalance(AVLNode<T> current) {
+    private void getFactorBalance(HBNode<T> current) {
         int hi = 0, hd = 0;
 
         if (current.getLeftChild() != null)
@@ -149,20 +152,20 @@ public class AVLTree<T extends DataStructure> {
         current.setFactorBalance(hd - hi);
     }
 
-    private AVLNode<T> rotate_DR(AVLNode<T> current) {
+    private HBNode<T> rotate_DR(HBNode<T> current) {
         current.setRightChild(rotate_SR(current.getRightChild()));
         getFactorBalance(current);
         return rotate_SL(current);
     }
 
-    private AVLNode<T> rotate_DL(AVLNode<T> current) {
+    private HBNode<T> rotate_DL(HBNode<T> current) {
         current.setLeftChild(rotate_SL(current.getLeftChild()));
         getFactorBalance(current);
         return rotate_SR(current);
     }
 
-    private AVLNode<T> rotate_SR(AVLNode<T> current) {
-        AVLNode<T> node = current.getLeftChild();
+    private HBNode<T> rotate_SR(HBNode<T> current) {
+        HBNode<T> node = current.getLeftChild();
         current.setLeftChild(node.getRightChild());
         node.setRightChild(current);
 
@@ -171,8 +174,8 @@ public class AVLTree<T extends DataStructure> {
         return node;
     }
 
-    private AVLNode<T> rotate_SL(AVLNode<T> current) {
-        AVLNode<T> node = current.getRightChild();
+    private HBNode<T> rotate_SL(HBNode<T> current) {
+        HBNode<T> node = current.getRightChild();
         current.setRightChild(node.getLeftChild());
         node.setLeftChild(current);
 
@@ -181,24 +184,24 @@ public class AVLTree<T extends DataStructure> {
         return node;
     }
 
-    private void balanceOlder(AVLNode<T> current) {
+    private void balanceOlder(HBNode<T> current) {
 
     }
 
-    private void balanceMinor(AVLNode<T> current) {
+    private void balanceMinor(HBNode<T> current) {
 
     }
 
     @Nullable
     @Contract(pure = true)
-    private AVLNode<T> getOlder(AVLNode<T> current) {
+    private HBNode<T> getOlder(HBNode<T> current) {
 
         return null;
     }
 
     @Nullable
     @Contract(pure = true)
-    private AVLNode<T> getMinor(AVLNode<T> current) {
+    private HBNode<T> getMinor(HBNode<T> current) {
 
         return null;
     }

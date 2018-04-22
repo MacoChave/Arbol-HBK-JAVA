@@ -3,16 +3,16 @@ package AVLTree;
 import org.jetbrains.annotations.NotNull;
 import structure.DataStructure;
 
-public class AVLNode<T extends DataStructure> extends DataStructure {
+public class HBNode<T extends DataStructure> extends DataStructure {
 
     private T info;
     private int factorBalance;
     private int leftHeight;
     private int rightHeight;
-    private AVLNode leftChild;
-    private AVLNode rightChild;
+    private HBNode<T> leftChild;
+    private HBNode<T> rightChild;
 
-    public AVLNode() {
+    public HBNode() {
         info = null;
         factorBalance = 0;
         leftHeight = 0;
@@ -21,7 +21,7 @@ public class AVLNode<T extends DataStructure> extends DataStructure {
         rightChild = null;
     }
 
-    public AVLNode(T data) {
+    public HBNode(T data) {
         this.info = data;
         leftHeight = 0;
         rightHeight = 0;
@@ -62,19 +62,19 @@ public class AVLNode<T extends DataStructure> extends DataStructure {
         this.rightHeight = rightHeight;
     }
 
-    public AVLNode getLeftChild() {
+    public HBNode<T> getLeftChild() {
         return leftChild;
     }
 
-    public void setLeftChild(AVLNode leftChild) {
+    public void setLeftChild(HBNode<T> leftChild) {
         this.leftChild = leftChild;
     }
 
-    public AVLNode getRightChild() {
+    public HBNode<T> getRightChild() {
         return rightChild;
     }
 
-    public void setRightChild(AVLNode rightChild) {
+    public void setRightChild(HBNode<T> rightChild) {
         this.rightChild = rightChild;
     }
 

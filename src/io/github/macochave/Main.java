@@ -1,13 +1,13 @@
 package io.github.macochave;
 
-import AVLTree.AVLTree;
+import AVLTree.HBTree;
 import TAD.TADTree;
 
 import java.io.*;
 
 public class Main {
 
-    private static AVLTree<TADTree> tree = new AVLTree<TADTree>();
+    private static HBTree<TADTree> tree = new HBTree<>(1);
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) {
